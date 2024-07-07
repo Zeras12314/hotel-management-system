@@ -1,0 +1,12 @@
+<app-navbar *ngIf="showNavbar"></app-navbar>
+<div class="container-fluid wrapper">
+  <div class="row wrapper-wrapper">
+    <app-sidebar *ngIf="showSidebar" class="col-2 bg-primary px-0"></app-sidebar>
+    <div class="col-10 wrapper-main">
+        <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+
+<!-- <app-main class="col-10 bg-warning"></app-main> -->
