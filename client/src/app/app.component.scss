@@ -1,0 +1,11 @@
+.wrapper{
+    min-height: 93vh;
+
+    &-wrapper {
+        min-height: inherit;
+    }
+    &-main {
+        // margin-top: 24px ;
+    }
+}
+
