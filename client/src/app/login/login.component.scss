@@ -1,26 +1,56 @@
 .login {
   position: absolute !important;
-  padding: 0 50px;
+  top: 0;
+  left: 0;
   height: 100vh;
   width: 100vw;
-  display: flex; /* Allow flexbox for alignment */
+  display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.login-form-wrapper {
-  flex: 1;
-}
-
-h2 {
-  font-size: 90px;
-}
-
-.login-img-wrapper {
-  flex: 1; /* Take up remaining space */
-  min-height: 90%; /* Adjust height as needed */
-  background-size: cover;
-  background-position: center center; /* Adjust background position */
   background-image: url("../../assets/images/login-bg.jpg");
-  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5); // Black overlay with 50% opacity
+    z-index: 1;
+  }
+
+  &-form-wrapper {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      margin-bottom: 2rem;
+    }
+  }
+
+  @media (min-width: 992px) {
+    &-form-wrapper {
+      max-width: 500px;
+    }
+
+    h2 {
+      font-size: 3rem;
+    }
+  }
 }
