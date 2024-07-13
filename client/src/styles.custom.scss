@@ -4,7 +4,8 @@
 .bg-primary,
 .border-primary,
 .alert-primary,
-.badge-primary {
+.badge-primary
+ {
   background-color: #0B6B62 !important;
   /* color: #your-new-text-color !important; */
   border-color: #0B6B62 !important;
@@ -13,6 +14,13 @@
 .text-primary {
   color: #0B6B62 !important;
 }
+
+/* Custom styles for table headers */
+.table th {
+  background-color: #EFEFEF !important;
+}
+
+
 
 /* .bg-primary {
   background-color: #your-new-primary-color !important;

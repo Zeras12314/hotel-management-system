@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const connect = mongoose.connect(
-  "mongodb+srv://chickentaba01:EuTu2XiQsURoSsk9@cluster0.rbvedxm.mongodb.net/LoginAuth?retryWrites=true&w=majority&appName=Cluster0"
+  "mongodb+srv://chickentaba01:EuTu2XiQsURoSsk9@cluster0.rbvedxm.mongodb.net/HotelManagement?retryWrites=true&w=majority&appName=Cluster0"
 );
 
 connect
@@ -20,7 +20,7 @@ connect
         type: String,
         required: true
     }
-  })
+  }, {collection: 'userData'});
 
-  const collection = new mongoose.model('Users', LoginSchema);
+  const collection = new mongoose.model('userData', LoginSchema);
   module.exports = collection;

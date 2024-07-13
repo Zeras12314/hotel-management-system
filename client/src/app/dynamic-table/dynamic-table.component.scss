@@ -1,0 +1,76 @@
+.table-responsive {
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      border: 1px solid #dee2e6;
+      padding: 0.5rem;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f8f9fa;
+      font-weight: bold;
+    }
+
+    .icon{
+        display: flex;
+      i{
+        background-color: #e9ecef !important;
+        font-size: 16px;
+        padding: 4px 10px;
+        margin-left: 5px;
+        min-height: 100%;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.1s ease;
+      }
+      .icon-delete {
+        &:hover {
+            background-color: red !important;
+            color: #ffffff !important;
+        }
+      }
+      .icon-update {
+        &:hover {
+            background-color: #0B6B62 !important;
+            color: #ffffff !important;
+        }
+      }
+    }
+
+    .status-available,
+    .status-occupied,
+    .status-maintenance,
+    .status-reserved,
+    .status-booked {
+      display: inline-block;
+      padding: 0.3em 0.6em;
+      border-radius: 4px;
+      color: white;
+    }
+
+    .status-available {
+      background-color: #60e69e;
+    }
+
+    .status-occupied {
+      background-color: #f5c148;
+    }
+
+    .status-maintenance {
+      background-color: #f5484d;
+    }
+
+    .status-booked {
+      background-color: #d748f5;
+    }
+
+    .status-reserved {
+      background-color: #237df2;
+    }
+  }
+}
