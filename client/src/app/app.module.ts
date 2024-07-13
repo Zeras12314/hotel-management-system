@@ -14,9 +14,10 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { MainComponent } from './main/main.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { DynamicTableComponent } from './dynamic-table/dynamic-table.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, SignupComponent, LoginComponent, NavbarComponent, SidebarComponent, MainComponent, RoomsComponent, NotFoundComponent],
+  declarations: [AppComponent, HomeComponent, SignupComponent, LoginComponent, NavbarComponent, SidebarComponent, MainComponent, RoomsComponent, NotFoundComponent, DynamicTableComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

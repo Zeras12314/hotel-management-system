@@ -23,6 +23,7 @@ export class SignupComponent implements OnInit {
     const { username, password } = this.signupForm.value;
     this.authService.signup(username, password).subscribe(
       (data) => {
+        alert("Account Created!")
         console.log(data); // Handle successful signup
       },
       (error) => {
