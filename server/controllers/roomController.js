@@ -1,6 +1,6 @@
 const RoomData = require('../models/roomModel');
 
-// get all rooms
+// GET ALL ROOMS
 const getAllRooms = async (req, res) => {
     try {
         const rooms = await RoomData.find({});
@@ -10,9 +10,7 @@ const getAllRooms = async (req, res) => {
     }
 };
 
-
-
-
+// GET ROOM BY ID
 
 
 module.exports = {

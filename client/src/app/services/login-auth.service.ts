@@ -17,14 +17,14 @@ export class LoginAuthService {
       password: password,
     };
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(`${this.apiUrl}/signup`, data, { headers });
+    return this.http.post(`${this.apiUrl}/api/user/signup`, data, { headers });
   }
 
   login(username: string, password: string): Observable<any> {
     const data = { username, password };
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    return this.http.post(`${this.apiUrl}/login`, data, { headers }).pipe(
+    return this.http.post(`${this.apiUrl}/api/user/login`, data, { headers }).pipe(
       catchError((error: HttpErrorResponse) => {
         let errorMessage = 'An unknown error occurred!';
         if (error.status === 404) {
