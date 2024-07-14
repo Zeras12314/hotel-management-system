@@ -17,7 +17,6 @@ const userDataSchema = mongoose.Schema(
   }
 );
 
-// Ensure the model is not redefined if it already exists
 const UserData = mongoose.model('UserData', userDataSchema);
 
 module.exports = UserData;
