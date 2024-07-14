@@ -1,4 +1,5 @@
 const RoomData = require("../models/roomModel");
+const mongoose = require('mongoose')
 
 // GET ALL ROOMS
 const getAllRooms = async (req, res) => {
@@ -18,8 +19,8 @@ const getRoom = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid product ID" });
     }
-    const room = await Room.findById(id);
-    res.status(200).json(product);
+    const room = await RoomData.findById(id);
+    res.status(200).json(room);
   } catch (error) {
     res.status(500);
     throw new Error(error.message)

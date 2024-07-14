@@ -1,43 +1,57 @@
 aside {
   margin-top: 24px;
   position: sticky;
+  top: 0;
 
   .active {
     color: #ffffff !important;
-    // background-color: #10906170;
   }
 
   ul {
     padding: 0;
-    
   }
 
   li {
     list-style: none;
     cursor: pointer;
-    width: 100%; /* Make the item take up 100% of the width */
-    padding: 10px 10px 10px 32px; /* Add some padding for better appearance */
-    box-sizing: border-box; /* Ensure padding is included in width calculation */
-    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    width: 100%;
+    padding: 10px 10px 10px 22px;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+    @media (min-width: 767.98px) {
+      padding-left:32px;
+    }
 
     &:hover {
       color: #ffffff;
-      background-color: #10906170; /* Change background color on hover */
+      background-color: #10906170;
     }
+
     a {
       text-decoration: none;
       color: #ffffff80;
-    }
+      display: flex;
+      align-items: center;
 
-    i {
-      font-size: 20px;
-      margin-right: 10px; /* Adjust spacing between icon and text */
-    }
+      i {
+        font-size: 20px;
+        margin-right: 10px;
 
-    span {
-      display: flex; /* Use flexbox for the span as well */
-      align-items: center; /* Vertically center the content within the span */
+        @media (max-width: 767.98px) {
+          margin-right: 0;
+        }
+      }
+
+      span {
+        @media (max-width: 767.98px) {
+          .sidebar-text {
+            display: none;
+          }
+        }
+        @media (min-width: 768px) {
+          display: inline;
+        }
+      }
     }
   }
-  
 }

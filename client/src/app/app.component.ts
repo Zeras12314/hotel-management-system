@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
   currentRoute: string;
   showNavbar: boolean = true;
   showSidebar: boolean = true;
-
+  
   constructor(private router: Router) {}
 
   ngOnInit(): void {
@@ -33,5 +33,9 @@ export class AppComponent implements OnInit {
         // this.showNavbar = !this.currentRoute.includes('login') || !this.currentRoute.includes('not-found');
         // this.showSidebar = !this.currentRoute.includes('login')|| !this.currentRoute.includes('not-found');
       });
+  }
+
+  toggleSidebar() {
+    this.showSidebar = !this.showSidebar;
   }
 }

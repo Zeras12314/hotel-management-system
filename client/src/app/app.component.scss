@@ -1,11 +1,33 @@
-.wrapper{
+.wrapper {
+    display: flex;
+    flex-direction: column;
     min-height: 93vh;
-
+  
     &-wrapper {
-        min-height: inherit;
+      flex: 1;
+      display: flex;
     }
+  
     &-main {
-        // margin-top: 24px ;
+      flex: 1;
+      overflow-y: auto; /* Allow vertical scrolling */
+      height: 100vh; /* Ensure it takes up the full height of the viewport */
+  
+      @media (max-width: 767.98px) {
+        margin-top: 20px;
+      }
+  
+      @media (min-width: 768px) {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
     }
-}
-
+  }
+  
+  .bg-primary {
+    @media (min-width: 768px) {
+      // Ensure the sidebar spans full height of the container
+      // height: 100%;
+    }
+  }
+  

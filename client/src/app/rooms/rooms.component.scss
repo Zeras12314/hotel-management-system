@@ -1,25 +1,38 @@
 .rooms {
+    padding: 4rem;
+  
     .rooms-btn {
-        &-left {
-            display: flex;
-          &-icons {
-            display: flex;
-            .btn-icon {
-                background-color: #e9ecef !important;
-                font-size: 20px;
-                padding: 4px 10px;
-                margin-left: 5px;
-                min-height: 100%;
-                cursor: pointer;
-                border-radius: 6px;
-                transition: background-color 0.1s ease;
-
-                &:hover {
-                    background-color: #0B6B62 !important;
-                    color: #ffffff !important;
-                }
+      display: flex;
+      justify-content: space-between;
+  
+      &-left {
+        display: flex;
+        
+        &-icons {
+          display: flex;
+  
+          .btn-icon {
+            background-color: #e9ecef !important;
+            font-size: 20px;
+            padding: 4px 10px;
+            margin-left: 5px;
+            min-height: 100%;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.1s ease;
+  
+            &:hover {
+              background-color: #0B6B62 !important;
+              color: #ffffff !important;
             }
           }
         }
+      }
     }
-}
+  
+    .dynamic-table {
+      width: auto;
+      overflow-y: auto; /* Allow vertical scrolling within the table if it overflows */
+    }
+  }
+  
