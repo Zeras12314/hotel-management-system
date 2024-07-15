@@ -15,7 +15,7 @@ const roomDataSchema = mongoose.Schema(
     },
     capacity: {
       type: Number,
-      required: [true, "Please enter a room capacity"],
+      required: false,
     },
     pricePerNight: {
       type: Number,
