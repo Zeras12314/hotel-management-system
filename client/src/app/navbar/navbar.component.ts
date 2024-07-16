@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class NavbarComponent implements OnInit {
   showSidebar = true;
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+   
   }
   toggleSidebar() {
     this.showSidebar = !this.showSidebar;
