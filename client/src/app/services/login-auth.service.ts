@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,7 @@ import { catchError } from 'rxjs/operators';
 export class LoginAuthService {
   constructor(private http: HttpClient) {}
 
-  private apiUrl = 'http://localhost:4000';
+  private apiUrl = environment.apiUrl;
 
   signup(username: string, password: string): Observable<any> {
     const data = {
@@ -17,14 +18,14 @@ export class LoginAuthService {
       password: password,
     };
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(`${this.apiUrl}/api/user/signup`, data, { headers });
+    return this.http.post(`${this.apiUrl}/user/signup`, data, { headers });
   }
 
   login(username: string, password: string): Observable<any> {
     const data = { username, password };
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    return this.http.post(`${this.apiUrl}/api/user/login`, data, { headers }).pipe(
+    return this.http.post(`${this.apiUrl}/user/login`, data, { headers }).pipe(
       catchError((error: HttpErrorResponse) => {
         let errorMessage = 'An unknown error occurred!';
         if (error.status === 404) {
