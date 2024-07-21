@@ -13,7 +13,11 @@ export class RoomService {
   constructor(private http: HttpClient) { }
 
 
-  getAllRoom(): Observable<Room> {
-    return this.http.get<Room>(`${this.apiUrl}/room`);
+  getAllRoom(): Observable<Room[]> {
+    return this.http.get<Room[]>(`${this.apiUrl}/room`)
+  }
+
+  deleteRoom(id): Observable<Room[]> {
+    return this.http.delete<Room[]>(`${this.apiUrl}/room`)
   }
 }

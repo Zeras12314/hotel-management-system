@@ -1,4 +1,5 @@
 export interface Room {
+    id: number,
     capacity: number;
     category: string;
     pricePerNight: number;
