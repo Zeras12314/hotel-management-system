@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
+import { RoomService } from "../room.service";
+import { Room } from "src/app/models/room";
 
 @Injectable({
     providedIn: 'root',
@@ -7,5 +8,7 @@ import { Store } from "@ngrx/store";
 
 export class FunctionService {
     currentPage = '';
-    constructor(protected store: Store){}
+    dynamicHeader: string[] = [];
+    tableData: Room[] = [];
+    constructor(private roomService: RoomService){}
 }
