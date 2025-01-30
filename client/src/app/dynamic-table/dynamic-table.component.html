@@ -46,9 +46,7 @@
     <thead>
       <tr>
         <!-- Loop through columns to create headers -->
-        <th>header</th> 
-        <th>header</th> 
-        <th>header</th> 
+        <th *ngFor="let header of dynamicHeader">{{header}}</th> 
       </tr>
     </thead>
     <tbody>
