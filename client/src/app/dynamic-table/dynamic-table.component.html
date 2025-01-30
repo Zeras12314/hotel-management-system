@@ -1,10 +1,10 @@
-<div class="table-responsive mt-4">
+<!-- <div class="table-responsive mt-4">
   <table class="table">
     <thead>
       <tr>
         <th><input type="checkbox" /></th>
         <ng-container *ngFor="let column of columns">
-          <!-- remove the id column display-->
+
           <ng-container *ngIf="column !== 'id'">
             <th>{{ column }}</th>
           </ng-container>
@@ -16,7 +16,7 @@
       <tr *ngFor="let row of data">
         <td><input type="checkbox" /></td>
         <ng-container *ngFor="let column of columns">
-           <!-- remove the id row display-->
+
           <ng-container *ngIf="column !== 'id'">
             <td>
               <span
@@ -35,6 +35,28 @@
           <i class="bi bi-trash3 icon-delete"></i
           ><i class="bi bi-pencil icon-update"></i>
         </td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->
+
+<div class="mt-4">
+  <h2>Dynamic Table</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <!-- Loop through columns to create headers -->
+        <th>header</th> 
+        <th>header</th> 
+        <th>header</th> 
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Loop through rows to create table data -->
+      <tr>
+        <td>test</td>
+        <td>sample</td>
+        <td>test</td>
       </tr>
     </tbody>
   </table>
