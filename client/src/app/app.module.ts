@@ -12,9 +12,11 @@ import { FormsModule } from './forms/forms.module';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MainComponent } from './main/main.component';
-import { RoomsComponent } from './rooms/rooms.component';
+import { RoomsComponent } from './components/rooms/rooms.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { DynamicTableComponent } from './dynamic-table/dynamic-table.component';
+import { DynamicFormsModule } from './dynamic-forms/dynamic-forms.module';
+import { StoreModule } from '@ngrx/store';
 
 
 @NgModule({
@@ -24,7 +26,8 @@ import { DynamicTableComponent } from './dynamic-table/dynamic-table.component';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule, DynamicFormsModule, 
+    StoreModule.forRoot({}, {})
   ],
   providers: [],
   bootstrap: [AppComponent],
