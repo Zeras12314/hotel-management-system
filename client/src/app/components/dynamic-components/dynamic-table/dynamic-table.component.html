@@ -40,21 +40,26 @@
   </table>
 </div> -->
 
-<div class="mt-4">
+<div class="mt-4 table-responsive">
   <h2>Dynamic Table</h2>
   <table class="table table-bordered">
     <thead>
       <tr>
-        <!-- Loop through columns to create headers -->
-        <th *ngFor="let header of dynamicHeader">{{header}}</th> 
+        <th *ngFor="let header of dynamicTableData.headers">{{ header }}</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <!-- Loop through rows to create table data -->
-      <tr>
-        <td>test</td>
-        <td>sample</td>
-        <td>test</td>
+      <tr *ngFor="let row of dynamicTableData.rows">
+        <td *ngFor="let header of dynamicTableData.headers">
+          <span [ngClass]="setStatusStyle(header, row[header])">{{
+            row[header]
+          }}</span>
+        </td>
+        <td class="icon">
+          <i class="bi bi-trash3 icon-delete"></i
+          ><i class="bi bi-pencil icon-update"></i>
+        </td>
       </tr>
     </tbody>
   </table>

@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FunctionService } from '../services/functions/function.service';
-import { FunctionServiceFactory } from '../services/functions/function.service-factory';
-import { FunctionServiceRoom } from '../services/functions/function-services/function.service-room';
+import { FunctionService } from '../../../services/functions/function.service';
+import { FunctionServiceFactory } from '../../../services/functions/function.service-factory';
+import { FunctionServiceRoom } from '../../../services/functions/function-services/function.service-room';
+import { TableData } from '../../../models/room';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -11,24 +12,27 @@ import { FunctionServiceRoom } from '../services/functions/function-services/fun
 export class DynamicTableComponent implements OnInit {
   @Input() columns: string[] = [];
   @Input() data: any[] = [];
-  dynamicHeader: string[] = []
+  // dynamicHeader: string[] = []
   tableData: any[] = []
+  @Input() dynamicTableData: TableData = { headers: [], rows: [] };
+  
 
   constructor( 
     private functionServiceFactory: FunctionServiceFactory,
     private functionService: FunctionService){}
 
   ngOnInit(): void {
-    const functionService = this.functionServiceFactory.getFunctionService();
-    this.dynamicHeader = functionService.dynamicHeader;
+    // const functionService = this.functionServiceFactory.getFunctionService();
+    // this.dynamicHeader = functionService.dynamicHeader;
 
-    const interval = setInterval(() => {
-      if (functionService.tableData.length > 0) {
-        this.tableData = functionService.tableData;
-        console.log("Updated tableData:", this.tableData);
-        clearInterval(interval); // Stop checking
-      }
-    }, 100);
+    // const interval = setInterval(() => {
+    //   if (functionService.tableData.length > 0) {
+    //     this.tableData = functionService.tableData;
+    //     console.log("Updated tableData:", this.tableData);
+    //     clearInterval(interval); // Stop checking
+    //   }
+    // }, 100);
+
 
   }
 

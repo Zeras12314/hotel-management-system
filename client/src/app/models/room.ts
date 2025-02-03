@@ -7,4 +7,10 @@ export interface Room {
     status: string;
     _id: string;
   }
+
+  export interface TableData {
+    headers: string[];
+    rows: any[]; // Using `any[]` to allow flexible data structures
+  }
+  
   
