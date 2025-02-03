@@ -7,12 +7,12 @@ import { RoomService } from "../../room.service";
   })
   
 export class FunctionServiceRoom implements OnInit{
-    dynamicHeader = [  'Room no.', 'Category', 'Capacity', 'Price per night', 'Room Status'];
-    tableData: Room[] = [];
+    // dynamicHeader = [  'Room no.', 'Category', 'Capacity', 'Price per night', 'Room Status'];
+    // tableData: Room[] = [];
 
     constructor(private roomService: RoomService){
-        console.log('FROM ROOM FUNCTION SERVICE');
-        this.getAllRoom();
+        // console.log('FROM ROOM FUNCTION SERVICE');
+        // this.getAllRoom();
 
     }
 
@@ -21,7 +21,7 @@ export class FunctionServiceRoom implements OnInit{
 
       getAllRoom() {
         this.roomService.getAllRoom().subscribe((rooms: Room[]) => {
-            this.tableData = rooms;
+            // this.tableData = rooms;
     //       this.transformedRooms = rooms.map((room) => ({
     //         id : room._id,
     //         'Room Number': room.roomNumber,

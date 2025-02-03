@@ -1,31 +1,9 @@
-<section class="rooms p-4 border">
-  <h2 class="mb-4">Rooms</h2>
-  <div class="rooms-btn d-md-flex justify-content-between">
-    <div class="room rooms-btn-left">
-      <form role="search">
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
-      </form>
-
-      <div class="rooms-btn-left-icons">
-        <div class="btn-icon text-primary">
-          <i class="bi bi-funnel"></i>
-        </div>
-        <div class="btn-icon text-primary">
-          <i class="bi bi-sort-alpha-down"></i>
-        </div>
-        <div class="btn-icon text-primary">
-          <i class="bi bi-sort-alpha-up"></i>
-        </div>
-      </div>
-    </div>
-    <div class="room btn-right mt-2 mt-md-0"><button class="btn btn-primary"><i class="bi bi-plus-circle me-2"></i>Add Room</button></div>
+<section class="p-4">
+  <div class="w-auto">
+    <app-dynamic-header class="w-auto"></app-dynamic-header>
   </div>
+
   <div class="dynamic-table w-auto">
-  <app-dynamic-table></app-dynamic-table>
-</div>
+    <app-dynamic-table [dynamicTableData]="roomTableData"></app-dynamic-table>
+  </div>
 </section>
