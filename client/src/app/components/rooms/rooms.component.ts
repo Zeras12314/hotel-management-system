@@ -39,7 +39,10 @@ export class RoomsComponent implements OnInit {
 
   ngOnInit(): void {
     
-    this.getAllRoom();
+    setTimeout(() => {
+      this.getAllRoom();
+    }, 100);
+    
   }
 
   getAllRoom() {

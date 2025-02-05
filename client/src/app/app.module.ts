@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -16,15 +15,9 @@ import { RoomsComponent } from './components/rooms/rooms.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { DynamicTableComponent } from './components/dynamic-components/dynamic-table/dynamic-table.component';
 import { DynamicFormsModule } from './dynamic-forms/dynamic-forms.module';
-import { StoreModule } from '@ngrx/store';
 import { DynamicHeaderComponent } from './components/dynamic-components/dynamic-header/dynamic-header.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
-// translation loader
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+import { CustomTranslateLoaderService } from './services/custom-translate-loader.service';
 
 @NgModule({
   declarations: [
@@ -50,8 +43,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
+        useClass: CustomTranslateLoaderService, // Use the custom loader service
       },
     }),
   ],
