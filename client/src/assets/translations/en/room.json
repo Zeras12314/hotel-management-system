@@ -1,5 +1,8 @@
 {
   "room": {
-    "title": "Room"
+    "title": "Room",
+    "button": {
+      "add": "Add Room"
+    }
   }
 }

@@ -5,6 +5,7 @@ import { FunctionService } from 'src/app/services/functions/function.service';
 import { FunctionServiceFactory } from 'src/app/services/functions/function.service-factory';
 import { StoreService } from 'src/app/services/store/store.service';
 import { TranslateService } from '@ngx-translate/core';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-rooms',
@@ -13,8 +14,8 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class RoomsComponent implements OnInit {
   functionService: FunctionService;
-  currentPage = 'ROOM';
-  rooms: Room[];
+  currentPage;
+  rooms$: Observable<TableData>; // Use Observable for async pipe
   transformedRooms: {
     'Room Number': string;
     Category: string;
@@ -28,45 +29,33 @@ export class RoomsComponent implements OnInit {
   constructor(
     private roomService: RoomService,
     private storeService: StoreService,
-    private functionServiceFactory: FunctionServiceFactory,
-
+    private functionServiceFactory: FunctionServiceFactory
   ) {
-
     // Set the initial value in the store when this components loads
-    this.storeService.setValue(this.currentPage);
+    this.storeService.setCurrentPage();
     this.functionService = this.functionServiceFactory.getFunctionService();
+    this.currentPage = this.storeService.getCurrentPage();
+    console.log('cuuuuurrrentttt pageeeee isss:  ', this.currentPage);
   }
 
   ngOnInit(): void {
-    
-    setTimeout(() => {
-      this.getAllRoom();
-    }, 100);
-    
-  }
+    this.rooms$ = this.roomService.getAllRoom().pipe(
+      map((rooms: Room[]) => {
+        const transformedRooms = rooms.map(({ _id, ...room }) => ({
+          'Room Number': room.roomNumber,
+          Category: room.category,
+          Capacity: room.capacity,
+          Price: 'P' + room.pricePerNight,
+          'Room Status': room.status,
+        }));
 
-  getAllRoom() {
-    this.roomService.getAllRoom().subscribe((rooms: Room[]) => {
-      this.transformedRooms = rooms.map(({ _id, ...room }) => ({
-        'Room Number': room.roomNumber,
-        Category: room.category,
-        Capacity: room.capacity,
-        Price: 'P' + room.pricePerNight,
-        'Room Status': room.status,
-      }));
-  
-      // Dynamically extract headers from the transformed data
-      if (this.transformedRooms.length > 0) {
-        this.roomTableData = {
-          headers: Object.keys(this.transformedRooms[0]), // Get headers from the first room object
-          rows: this.transformedRooms,
+        return {
+          headers: transformedRooms.length
+            ? Object.keys(transformedRooms[0])
+            : [],
+          rows: transformedRooms,
         };
-      }
-    });
+      })
+    );
   }
-
-
-  
-
-  deleteRoom(id) {}
 }

@@ -1,5 +1,8 @@
 {
   "room": {
-    "title": "Habitación"
+    "title": "Habitación",
+    "button": {
+      "add": "Agregar habitación"
+    }
   }
 }
