@@ -9,17 +9,13 @@ import { TranslateService } from '@ngx-translate/core';
 export class DynamicHeaderComponent implements OnInit {
   constructor(private translate: TranslateService) {
     this.translate.addLangs(['en', 'es']); // Define available languages
-    this.translate.setDefaultLang('en'); // Default language
-    ; // Set default language to 'en'
   }
   ngOnInit(): void {
-    // this.translate.setDefaultLang('room')
      // Force 'en' as the active language
-     this.setLanguage('es');
+     this.setLanguage('en');
 
   }
   setLanguage(lang: string) {
-    console.log(`Setting language to: ${lang}`); // Log the language being set
     this.translate.use(lang);
   }
 }

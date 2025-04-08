@@ -4,6 +4,8 @@
   </div>
 
   <div class="dynamic-table w-auto">
-    <app-dynamic-table [dynamicTableData]="roomTableData"></app-dynamic-table>
+    <ng-container >
+    <app-dynamic-table [dynamicTableData]="rooms$ | async"></app-dynamic-table>
+  </ng-container>
   </div>
 </section>
