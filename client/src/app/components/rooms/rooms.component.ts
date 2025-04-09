@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RoomService } from 'src/app/services/room.service';
+import { RoomService } from 'src/app/services/room/room.service';
 import { Room, TableData } from 'src/app/models/room';
 import { FunctionService } from 'src/app/services/functions/function.service';
 import { FunctionServiceFactory } from 'src/app/services/functions/function.service-factory';
@@ -35,7 +35,6 @@ export class RoomsComponent implements OnInit {
     this.storeService.setCurrentPage();
     this.functionService = this.functionServiceFactory.getFunctionService();
     this.currentPage = this.storeService.getCurrentPage();
-    console.log('cuuuuurrrentttt pageeeee isss:  ', this.currentPage);
   }
 
   ngOnInit(): void {

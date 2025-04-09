@@ -14,10 +14,10 @@ import { MainComponent } from './main/main.component';
 import { RoomsComponent } from './components/rooms/rooms.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { DynamicTableComponent } from './components/dynamic-components/dynamic-table/dynamic-table.component';
-import { DynamicFormsModule } from './dynamic-forms/dynamic-forms.module';
 import { DynamicHeaderComponent } from './components/dynamic-components/dynamic-header/dynamic-header.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { CustomTranslateLoaderService } from './services/custom-translate-loader.service';
+import { DynamicFormsComponent } from './components/dynamic-components/dynamic-forms/dynamic-forms.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +32,7 @@ import { CustomTranslateLoaderService } from './services/custom-translate-loader
     NotFoundComponent,
     DynamicTableComponent,
     DynamicHeaderComponent,
+    DynamicFormsComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +40,6 @@ import { CustomTranslateLoaderService } from './services/custom-translate-loader
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
-    DynamicFormsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

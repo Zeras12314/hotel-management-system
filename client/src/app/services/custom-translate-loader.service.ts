@@ -17,7 +17,6 @@ export class CustomTranslateLoaderService implements TranslateLoader {
 
     // Create an array of HTTP requests for each file
     const requests = files.map(file => {
-      console.log(`Requesting: ./assets/translations/${lang}/${file}.json`); // Log each file request
       return this.http.get(`./assets/translations/${lang}/${file}.json`);
     });
 

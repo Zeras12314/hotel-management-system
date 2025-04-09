@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from "@angular/core";
 import { Room } from "src/app/models/room";
-import { RoomService } from "../../room.service";
+import { RoomService } from "../../room/room.service";
 
 @Injectable({
     providedIn: 'root'  // This makes it available application-wide
