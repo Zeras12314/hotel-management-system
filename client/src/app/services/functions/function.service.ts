@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { RoomService } from "../room.service";
+import { RoomService } from "../room/room.service";
 import { Room } from "src/app/models/room";
 
 @Injectable({

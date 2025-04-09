@@ -1,0 +1,139 @@
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Room</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- Dynamic content goes here -->
+        {{ modalData?.data }}
+
+        <!-- // ROW 1 -->
+        <form [formGroup]="addDataForm">
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Room #</label>
+            <div class="col-sm-8">
+              <input
+                type="text"
+                class="form-control"
+                id="roomNumber"
+                formControlName="roomNumber"
+              />
+              <small
+                class="text-danger"
+                *ngIf="addDataForm.get('roomNumber')?.touched && addDataForm.get('roomNumber')?.errors?.['required']"
+                >Room Number is required</small
+              >
+            </div>
+          </div>
+
+          <!-- // ROW 2 -->
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Category</label>
+            <div class="col-sm-8">
+              <select
+                class="form-select"
+                aria-label="Select Category"
+                formControlName="category"
+              >
+                <option value="" disabled selected>Select a category</option>
+                <option
+                  *ngFor="let category of roomCategories"
+                  [value]="category"
+                >
+                  {{ category }}
+                </option>
+              </select>
+              <small
+                class="text-danger"
+                *ngIf="addDataForm.get('category')?.touched && addDataForm.get('category')?.errors?.['required']"
+                >Please select category from the dropdown</small
+              >
+            </div>
+          </div>
+
+          <!-- // ROW 3 -->
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Capacity</label>
+            <div class="col-sm-8">
+              <input
+                type="text"
+                class="form-control"
+                id="capacity"
+                formControlName="capacity"
+              />
+              <!-- VALIDATION -->
+              <div *ngIf="addDataForm.get('capacity')?.touched">
+                <small class="text-danger" *ngIf="addDataForm.get('capacity')?.errors?.['required']">Capacity is required</small>
+                <small class="text-danger" *ngIf="addDataForm.get('capacity')?.errors?.['pattern']">Only numbers are allowed</small>
+              </div>              
+            </div>
+          </div>
+
+          <!-- // ROW 4 -->
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Price</label>
+            <div class="col-sm-8">
+              <input
+                type="text"
+                class="form-control"
+                id="price"
+                formControlName="pricePerNight"
+              />
+               <!-- VALIDATION -->
+               <div *ngIf="addDataForm.get('pricePerNight')?.touched">
+                <small class="text-danger" *ngIf="addDataForm.get('pricePerNight')?.errors?.['required']">Capacity is required</small>
+                <small class="text-danger" *ngIf="addDataForm.get('pricePerNight')?.errors?.['pattern']">Only numbers are allowed</small>
+              </div>  
+            </div>
+          </div>
+
+          <!-- // ROW 5 -->
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Status</label>
+            <div class="col-sm-8">
+              <select
+                class="form-select"
+                aria-label="Select Status"
+                formControlName="status"
+              >
+                <option value="" disabled selected>Select a status</option>
+                <option
+                  *ngFor="let status of roomStatus"
+                  [value]="status"
+                >
+                  {{ status }}
+                </option>
+              </select>
+              <small
+                class="text-danger"
+                *ngIf="addDataForm.get('status')?.touched && addDataForm.get('status')?.errors?.['required']"
+                >Please select status from the dropdown</small
+              >
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" [disabled]="addDataForm.invalid" (click)="addData()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
