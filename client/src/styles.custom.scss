@@ -4,51 +4,52 @@
 .bg-primary,
 .border-primary,
 .alert-primary,
-.badge-primary
- {
-  background-color: #0B6B62 !important;
+.badge-primary {
+  background-color: #0b6b62 !important;
   /* color: #your-new-text-color !important; */
-  border-color: #0B6B62 !important;
+  border-color: #0b6b62 !important;
 }
 
 .text-primary {
-  color: #0B6B62 !important;
+  color: #0b6b62 !important;
 }
 
 /* Custom styles for table headers */
 .table th {
-  background-color: #EFEFEF !important;
+  background-color: #efefef !important;
 }
 
-
-
-/* .bg-primary {
-  background-color: #your-new-primary-color !important;
+/* Override pagination link styles */
+.pagination .page-item .page-link {
+  color: #0b6b62 !important; /* Text color */
 }
 
-.border-primary {
-  border-color: #your-new-primary-color !important;
+.pagination .page-item.active .page-link {
+  background-color: #0b6b62 !important; /* Active page background */
+  color: #ffffff !important; /* Active page text color */
+  border-color: #0b6b62 !important; /* Active page border */
 }
 
-.alert-primary {
-  background-color: #your-new-primary-color !important;
-  border-color: #your-new-primary-color !important;
+.pagination .page-item.disabled .page-link {
+  background-color: #e9ecef !important; /* Disabled background (lighter color) */
+  color: #6c757d !important; /* Disabled text color */
 }
 
-.badge-primary {
-  background-color: #your-new-primary-color !important;
-} */
+.pagination .page-item a.page-link {
+  background-color: transparent !important;
+  color: #0b6b62 !important;
+}
 
 body {
-    font-family: 'Roboto', sans-serif;
-  }
-  
-  .btn,
-  .alert,
-  .navbar,
-  .dropdown-menu,
-  .card,
-  .modal-content,
-  .badge {
-    font-family: 'Roboto', sans-serif;
-  }
+  font-family: "Roboto", sans-serif;
+}
+
+.btn,
+.alert,
+.navbar,
+.dropdown-menu,
+.card,
+.modal-content,
+.badge {
+  font-family: "Roboto", sans-serif;
+}

@@ -18,6 +18,10 @@ export class RoomService {
   }
 
   deleteRoom(id): Observable<Room[]> {
-    return this.http.delete<Room[]>(`${this.apiUrl}/room`)
+    return this.http.delete<Room[]>(`${this.apiUrl}/room/${id}`)
+  }
+
+  addRoom(room: Room): Observable<Room[]> {
+    return this.http.post<Room[]>(`${this.apiUrl}/room`, room)
   }
 }
