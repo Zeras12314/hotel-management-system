@@ -18,6 +18,8 @@ import { DynamicHeaderComponent } from './components/dynamic-components/dynamic-
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { CustomTranslateLoaderService } from './services/custom-translate-loader.service';
 import { DynamicFormsComponent } from './components/dynamic-components/dynamic-forms/dynamic-forms.component';
+import { PaginationComponent } from './components/dynamic-components/pagination/pagination.component';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { DynamicFormsComponent } from './components/dynamic-components/dynamic-f
     DynamicTableComponent,
     DynamicHeaderComponent,
     DynamicFormsComponent,
+    PaginationComponent,
+    LoadingSpinnerComponent,
   ],
   imports: [
     BrowserModule,

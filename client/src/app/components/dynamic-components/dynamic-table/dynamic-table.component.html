@@ -1,4 +1,4 @@
-<div class="mt-4 table-responsive" *ngIf="dynamicTableData; else noDatatoDisplay">
+<div class="mt-4 table-responsive" *ngIf="dynamicTableData">
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -22,9 +22,4 @@
   </table>
 </div>
 
-<ng-template #noDatatoDisplay>
-  <div class="alert alert-warning text-center m-5 p-5" role="alert">
-    <h4 class="fw-bold mb-0">No data to display</h4>
-  </div>
-</ng-template>
 

@@ -1,11 +1,22 @@
-<section class="p-4">
+<app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
+<section class="p-4 mb-5">
   <div class="w-auto">
     <app-dynamic-header class="w-auto"></app-dynamic-header>
   </div>
 
   <div class="dynamic-table w-auto">
-    <ng-container >
-    <app-dynamic-table [dynamicTableData]="rooms$ | async"></app-dynamic-table>
-  </ng-container>
+    <ng-container>
+      <app-dynamic-table
+        [dynamicTableData]="rooms$ | async"
+      ></app-dynamic-table>
+    </ng-container>
+  </div>
+  <div>
+    <app-pagination
+    *ngIf="!isLoading"
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      (pageChanged)="onPageChange($event)"
+    ></app-pagination>
   </div>
 </section>
