@@ -46,6 +46,11 @@ export class RoomsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRoomData();
+
+    // 🧠 Listen for refresh trigger
+    this.storeService.onRoomRefresh().subscribe(() => {
+      this.getRoomData(); // Refresh data when a new room is added
+    });
   }
 
   // Handle page change (without storing in the service)
@@ -54,38 +59,52 @@ export class RoomsComponent implements OnInit {
     this.ngOnInit(); // Re-fetch data for the new page
   }
 
-  getRoomData(){
-    this.isLoading = true
-    this.rooms$ = this.roomService.getAllRoom().pipe(take(1),
+  getRoomData() {
+    this.isLoading = true;
+    this.rooms$ = this.roomService.getAllRoom().pipe(
+      take(1),
       map((rooms: Room[]) => {
-        // pagination calculation
-        const totalRooms = rooms.length;
-        this.totalPages = Math.ceil(totalRooms / this.pageSize);
-
-        const startIndex = (this.currentPage - 1) * this.pageSize;
-        const paginatedRooms = rooms.slice(
-          startIndex,
-          startIndex + this.pageSize
-        );
-
-        const transformedRooms =paginatedRooms.map(({ _id, ...room }) => ({
-          'Room Number': room.roomNumber,
-          Category: room.category,
-          Capacity: room.capacity,
-          Price: 'P' + room.pricePerNight,
-          'Room Status': room.status,
-        }));
-
-        return {
-          headers: transformedRooms.length
-            ? Object.keys(transformedRooms[0])
-            : [],
-          rows: transformedRooms,
-        };
+        const paginatedRooms = this.getPaginatedRooms(rooms);
+        const transformedRooms = this.transformRooms(paginatedRooms);
+        return this.formatData(transformedRooms);
       }),
       finalize(() => {
         this.isLoading = false;
       })
     );
+  }
+
+  private getPaginatedRooms(rooms: Room[]) {
+    const totalRooms = rooms.length;
+    this.totalPages = Math.ceil(totalRooms / this.pageSize);
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return rooms.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  private transformRooms(paginatedRooms: Room[]) {
+    return paginatedRooms.map((room) => ({
+      _id: room._id,
+      'Room Number': room.roomNumber,
+      Category: room.category,
+      Capacity: room.capacity,
+      Price: 'P' + room.pricePerNight,
+      'Room Status': room.status,
+    }));
+  }
+
+  private formatData(transformedRooms: any[]) {
+    return {
+      headers: transformedRooms.length
+        ? Object.keys(transformedRooms[0]).filter((key) => key !== '_id')
+        : [],
+      rows: transformedRooms,
+    };
+  }
+
+  onDeleteRoom($event) {
+    const roomIdToDelete = $event._id;
+    // this.roomService.deleteRoom(roomIdToDelete).subscribe(() => {
+    //   console.log('Successfully removed', roomIdToDelete);
+    // });
   }
 }

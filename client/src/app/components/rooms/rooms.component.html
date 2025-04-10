@@ -8,6 +8,7 @@
     <ng-container>
       <app-dynamic-table
         [dynamicTableData]="rooms$ | async"
+        (deleteRow)="onDeleteRoom($event)"
       ></app-dynamic-table>
     </ng-container>
   </div>

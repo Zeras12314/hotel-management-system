@@ -5,6 +5,7 @@ import { Modal } from 'bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownConstants } from 'src/app/utils/dropdown.constants';
 import { RoomService } from 'src/app/services/room/room.service';
+import { StoreService } from 'src/app/services/store/store.service';
 
 @Component({
   selector: 'app-dynamic-forms',
@@ -20,29 +21,13 @@ export class DynamicFormsComponent implements OnInit {
   constructor(
     private modalService: ModalService,
     private fb: FormBuilder,
-    private roomService: RoomService
+    private roomService: RoomService,
+    private storeService: StoreService
   ) {}
 
   ngOnInit() {
-    // this.modalCall();
     this.addDataFormOnInit();
   }
-
-//   modalCall() {
-//     this.modalService.modalState$.subscribe((event) => {
-//       if (!event) return;
-//       const modalElement = document.getElementById(event.id);
-//       if (!modalElement) return;
-//       const modal = new Modal(modalElement);
-//       this.currentModal = modal
-//       if (event.action === 'open') {
-//         modal.show();
-//       } else {
-//         modal.hide();
-//       }
-// 
-//     });
-//   }
 
   addDataFormOnInit() {
     this.addDataForm = this.fb.group({
@@ -62,7 +47,10 @@ export class DynamicFormsComponent implements OnInit {
     this.roomService.addRoom(newRoom).subscribe((res) => {
       console.log(res);
        // Close the modal via the ModalService
-      this.modalService.closeDialog('exampleModal');  // Make sure 'exampleModal' matches the modal's IDz
+      this.modalService.closeDialog('exampleModal');
+
+      // Tell the app: "Room data changed, refresh it!"
+      this.storeService.triggerRoomRefresh();
     });
   }
   

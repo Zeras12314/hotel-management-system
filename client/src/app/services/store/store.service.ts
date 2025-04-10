@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { RouteConstants } from 'src/app/utils/route.constants';
 
 @Injectable({
@@ -8,6 +9,8 @@ import { RouteConstants } from 'src/app/utils/route.constants';
 export class StoreService {
   value: string;
   currentPage: string;
+  private refreshRoomLists$ = new Subject<void>(); // rxjs signal to refresh room
+
   constructor(private router: Router) {}
 
   setValue(value: string): void {
@@ -33,5 +36,13 @@ export class StoreService {
 
   getCurrentPage(){
     return this.currentPage
+  }
+
+  triggerRoomRefresh(){
+    this.refreshRoomLists$.next(); //trigger
+  }
+
+  onRoomRefresh(){
+    return this.refreshRoomLists$.asObservable(); // listen
   }
 }

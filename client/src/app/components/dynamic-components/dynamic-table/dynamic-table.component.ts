@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FunctionService } from '../../../services/functions/function.service';
 import { FunctionServiceFactory } from '../../../services/functions/function.service-factory';
 import { FunctionServiceRoom } from '../../../services/functions/function-services/function.service-room';
@@ -15,6 +15,7 @@ export class DynamicTableComponent implements OnInit {
   // dynamicHeader: string[] = []
   tableData: any[] = []
   @Input() dynamicTableData: TableData = { headers: [], rows: [] };
+  @Output() deleteRow = new EventEmitter<any>(); // can emit the whole row or just ID
   
 
   constructor( 
@@ -22,18 +23,6 @@ export class DynamicTableComponent implements OnInit {
     private functionService: FunctionService){}
 
   ngOnInit(): void {
-    // const functionService = this.functionServiceFactory.getFunctionService();
-    // this.dynamicHeader = functionService.dynamicHeader;
-
-    // const interval = setInterval(() => {
-    //   if (functionService.tableData.length > 0) {
-    //     this.tableData = functionService.tableData;
-    //     console.log("Updated tableData:", this.tableData);
-    //     clearInterval(interval); // Stop checking
-    //   }
-    // }, 100);
-
-
   }
 
   setStatusStyle(column: string, value: any): string {
@@ -54,5 +43,9 @@ export class DynamicTableComponent implements OnInit {
       }
     }
     return ''
+  }
+
+  onDelete(row: any) {
+    this.deleteRow.emit(row); // emit to parent
   }
 }
