@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FunctionService } from '../../../services/functions/function.service';
 import { FunctionServiceFactory } from '../../../services/functions/function.service-factory';
 import { FunctionServiceRoom } from '../../../services/functions/function-services/function.service-room';
 import { TableData } from '../../../models/room';
+import { ModalService } from 'src/app/services/modal.service';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -15,25 +16,16 @@ export class DynamicTableComponent implements OnInit {
   // dynamicHeader: string[] = []
   tableData: any[] = []
   @Input() dynamicTableData: TableData = { headers: [], rows: [] };
+  @Output() deleteRow = new EventEmitter<any>(); // can emit the whole row or just ID
+  @Input() rows: any;
   
 
   constructor( 
     private functionServiceFactory: FunctionServiceFactory,
-    private functionService: FunctionService){}
+    private functionService: FunctionService,
+    private modalService: ModalService){}
 
   ngOnInit(): void {
-    // const functionService = this.functionServiceFactory.getFunctionService();
-    // this.dynamicHeader = functionService.dynamicHeader;
-
-    // const interval = setInterval(() => {
-    //   if (functionService.tableData.length > 0) {
-    //     this.tableData = functionService.tableData;
-    //     console.log("Updated tableData:", this.tableData);
-    //     clearInterval(interval); // Stop checking
-    //   }
-    // }, 100);
-
-
   }
 
   setStatusStyle(column: string, value: any): string {
@@ -54,5 +46,17 @@ export class DynamicTableComponent implements OnInit {
       }
     }
     return ''
+  }
+
+  // onDelete(row: any) {
+  //   this.deleteRow.emit(row); // emit to parent
+  // }
+
+  triggerDelete(row: any){
+    this.modalService.openDialog('deleteModal', row)
+  }
+
+  onConfirmDelete(row: any) {
+    this.deleteRow.emit(row)
   }
 }

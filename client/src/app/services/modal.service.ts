@@ -5,7 +5,11 @@ import { Modal } from 'bootstrap';
 
 @Injectable({ providedIn: 'root' })
 export class ModalService {
-  private modalState = new BehaviorSubject<{id: string, action: 'open'|'close', data?: any}>(null);
+  private modalState = new BehaviorSubject<{
+    id: string;
+    action: 'open' | 'close';
+    data?: any;
+  }>(null);
   public modalState$ = this.modalState.asObservable();
   private modalInstances: { [key: string]: Modal } = {};
 
@@ -26,12 +30,13 @@ export class ModalService {
   closeDialog(modalId: string) {
     this.modalState.next({ id: modalId, action: 'close' });
 
+    // 🔒 Blur the focused element before hiding to avoid aria-hidden issue
+    (document.activeElement as HTMLElement)?.blur();
+
     // Close the modal if instance exists
     const modal = this.modalInstances[modalId];
     if (modal) {
       modal.hide();
     }
   }
-
-
 }

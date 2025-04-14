@@ -6,6 +6,7 @@ import { FunctionServiceFactory } from 'src/app/services/functions/function.serv
 import { StoreService } from 'src/app/services/store/store.service';
 import { TranslateService } from '@ngx-translate/core';
 import { finalize, map, Observable, take } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-rooms',
@@ -34,7 +35,8 @@ export class RoomsComponent implements OnInit {
   constructor(
     private roomService: RoomService,
     private storeService: StoreService,
-    private functionServiceFactory: FunctionServiceFactory
+    private functionServiceFactory: FunctionServiceFactory,
+    private toastr: ToastrService
   ) {
     // Set initial page number
     this.currentPage = 1; // Start at the first page
@@ -46,6 +48,11 @@ export class RoomsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRoomData();
+
+    // 🧠 Listen for refresh trigger
+    this.storeService.onRoomRefresh().subscribe(() => {
+      this.getRoomData(); // Refresh data when a new room is added
+    });
   }
 
   // Handle page change (without storing in the service)
@@ -54,38 +61,68 @@ export class RoomsComponent implements OnInit {
     this.ngOnInit(); // Re-fetch data for the new page
   }
 
-  getRoomData(){
-    this.isLoading = true
-    this.rooms$ = this.roomService.getAllRoom().pipe(take(1),
+  getRoomData() {
+    this.isLoading = true;
+    this.rooms$ = this.roomService.getAllRoom().pipe(
+      take(1),
       map((rooms: Room[]) => {
-        // pagination calculation
-        const totalRooms = rooms.length;
-        this.totalPages = Math.ceil(totalRooms / this.pageSize);
-
-        const startIndex = (this.currentPage - 1) * this.pageSize;
-        const paginatedRooms = rooms.slice(
-          startIndex,
-          startIndex + this.pageSize
-        );
-
-        const transformedRooms =paginatedRooms.map(({ _id, ...room }) => ({
-          'Room Number': room.roomNumber,
-          Category: room.category,
-          Capacity: room.capacity,
-          Price: 'P' + room.pricePerNight,
-          'Room Status': room.status,
-        }));
-
-        return {
-          headers: transformedRooms.length
-            ? Object.keys(transformedRooms[0])
-            : [],
-          rows: transformedRooms,
-        };
+        const paginatedRooms = this.getPaginatedRooms(rooms);
+        const transformedRooms = this.transformRooms(paginatedRooms);
+        return this.formatData(transformedRooms);
       }),
       finalize(() => {
         this.isLoading = false;
       })
     );
   }
+
+  private getPaginatedRooms(rooms: Room[]) {
+    const totalRooms = rooms.length;
+    this.totalPages = Math.ceil(totalRooms / this.pageSize);
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return rooms.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  private transformRooms(paginatedRooms: Room[]) {
+    return paginatedRooms.map((room) => ({
+      _id: room._id,
+      'Room Number': room.roomNumber,
+      Category: room.category,
+      Capacity: room.capacity,
+      Price: 'P' + room.pricePerNight,
+      'Room Status': room.status,
+    }));
+  }
+
+  private formatData(transformedRooms: any[]) {
+    return {
+      headers: transformedRooms.length
+        ? Object.keys(transformedRooms[0]).filter((key) => key !== '_id')
+        : [],
+      rows: transformedRooms,
+    };
+  }
+
+  onDeleteRow(row: any) {
+    this.isLoading = true;
+
+    this.roomService.getAllRoom().pipe(take(1)).subscribe((rooms: Room[]) => {
+      const totalItems = rooms.length - 1; // subtract 1 to simulate deletion
+      const totalPagesAfterDelete = Math.ceil(totalItems / this.pageSize);
+      
+      if (this.currentPage > totalPagesAfterDelete) {
+        this.currentPage = Math.max(totalPagesAfterDelete, 1); // go back a page if needed
+      }
+  
+      this.roomService.deleteRoom(row._id).pipe(
+        finalize(() => {
+          this.getRoomData(); // refresh updated data
+        })
+      ).subscribe(() => {
+       this.toastr.success('Room deleted successfully!', 'Success')
+      });
+    });
+  }
+  
+  
 }
