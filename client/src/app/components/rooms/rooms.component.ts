@@ -6,6 +6,7 @@ import { FunctionServiceFactory } from 'src/app/services/functions/function.serv
 import { StoreService } from 'src/app/services/store/store.service';
 import { TranslateService } from '@ngx-translate/core';
 import { finalize, map, Observable, take } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-rooms',
@@ -34,7 +35,8 @@ export class RoomsComponent implements OnInit {
   constructor(
     private roomService: RoomService,
     private storeService: StoreService,
-    private functionServiceFactory: FunctionServiceFactory
+    private functionServiceFactory: FunctionServiceFactory,
+    private toastr: ToastrService
   ) {
     // Set initial page number
     this.currentPage = 1; // Start at the first page
@@ -101,10 +103,26 @@ export class RoomsComponent implements OnInit {
     };
   }
 
-  onDeleteRoom($event) {
-    const roomIdToDelete = $event._id;
-    // this.roomService.deleteRoom(roomIdToDelete).subscribe(() => {
-    //   console.log('Successfully removed', roomIdToDelete);
-    // });
+  onDeleteRow(row: any) {
+    this.isLoading = true;
+
+    this.roomService.getAllRoom().pipe(take(1)).subscribe((rooms: Room[]) => {
+      const totalItems = rooms.length - 1; // subtract 1 to simulate deletion
+      const totalPagesAfterDelete = Math.ceil(totalItems / this.pageSize);
+      
+      if (this.currentPage > totalPagesAfterDelete) {
+        this.currentPage = Math.max(totalPagesAfterDelete, 1); // go back a page if needed
+      }
+  
+      this.roomService.deleteRoom(row._id).pipe(
+        finalize(() => {
+          this.getRoomData(); // refresh updated data
+        })
+      ).subscribe(() => {
+       this.toastr.success('Room deleted successfully!', 'Success')
+      });
+    });
   }
+  
+  
 }

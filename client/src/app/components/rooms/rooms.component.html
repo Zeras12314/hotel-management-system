@@ -1,4 +1,5 @@
 <app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
+<app-pop-up-modal (confirmed)="onDeleteRow($event)"></app-pop-up-modal>
 <section class="p-4 mb-5">
   <div class="w-auto">
     <app-dynamic-header class="w-auto"></app-dynamic-header>
@@ -8,7 +9,7 @@
     <ng-container>
       <app-dynamic-table
         [dynamicTableData]="rooms$ | async"
-        (deleteRow)="onDeleteRoom($event)"
+        (deleteRow)="onDeleteRow($event)"
       ></app-dynamic-table>
     </ng-container>
   </div>

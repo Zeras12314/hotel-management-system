@@ -3,6 +3,7 @@ import { FunctionService } from '../../../services/functions/function.service';
 import { FunctionServiceFactory } from '../../../services/functions/function.service-factory';
 import { FunctionServiceRoom } from '../../../services/functions/function-services/function.service-room';
 import { TableData } from '../../../models/room';
+import { ModalService } from 'src/app/services/modal.service';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -16,11 +17,13 @@ export class DynamicTableComponent implements OnInit {
   tableData: any[] = []
   @Input() dynamicTableData: TableData = { headers: [], rows: [] };
   @Output() deleteRow = new EventEmitter<any>(); // can emit the whole row or just ID
+  @Input() rows: any;
   
 
   constructor( 
     private functionServiceFactory: FunctionServiceFactory,
-    private functionService: FunctionService){}
+    private functionService: FunctionService,
+    private modalService: ModalService){}
 
   ngOnInit(): void {
   }
@@ -45,7 +48,15 @@ export class DynamicTableComponent implements OnInit {
     return ''
   }
 
-  onDelete(row: any) {
-    this.deleteRow.emit(row); // emit to parent
+  // onDelete(row: any) {
+  //   this.deleteRow.emit(row); // emit to parent
+  // }
+
+  triggerDelete(row: any){
+    this.modalService.openDialog('deleteModal', row)
+  }
+
+  onConfirmDelete(row: any) {
+    this.deleteRow.emit(row)
   }
 }

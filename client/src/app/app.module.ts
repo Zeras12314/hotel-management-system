@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from './forms/forms.module';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -20,6 +20,9 @@ import { CustomTranslateLoaderService } from './services/custom-translate-loader
 import { DynamicFormsComponent } from './components/dynamic-components/dynamic-forms/dynamic-forms.component';
 import { PaginationComponent } from './components/dynamic-components/pagination/pagination.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+import { PopUpModalComponent } from './components/dynamic-components/pop-up-modal/pop-up-modal.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -37,6 +40,7 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
     DynamicFormsComponent,
     PaginationComponent,
     LoadingSpinnerComponent,
+    PopUpModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,12 +48,17 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
+    BrowserAnimationsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useClass: CustomTranslateLoaderService, // Use the custom loader service
       },
     }),
+   ToastrModule.forRoot({
+    positionClass: 'toast-top-right',
+    timeOut: 3000,
+   })
   ],
   providers: [],
   bootstrap: [AppComponent],
