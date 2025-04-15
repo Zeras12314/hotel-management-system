@@ -6,16 +6,19 @@
   </div>
 
   <div class="dynamic-table w-auto">
-    <ng-container>
+    <ng-container *ngIf="!noDataToDisplay; else noData">
       <app-dynamic-table
         [dynamicTableData]="rooms$ | async"
         (deleteRow)="onDeleteRow($event)"
       ></app-dynamic-table>
     </ng-container>
+    <ng-template #noData>
+      <h3 class="text-center py-5">No Data to Display</h3>
+    </ng-template>
   </div>
   <div>
     <app-pagination
-    *ngIf="!isLoading"
+    *ngIf="!isLoading && !noDataToDisplay"
       [currentPage]="currentPage"
       [totalPages]="totalPages"
       (pageChanged)="onPageChange($event)"

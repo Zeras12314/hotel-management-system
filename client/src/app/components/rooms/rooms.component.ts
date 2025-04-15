@@ -5,7 +5,7 @@ import { FunctionService } from 'src/app/services/functions/function.service';
 import { FunctionServiceFactory } from 'src/app/services/functions/function.service-factory';
 import { StoreService } from 'src/app/services/store/store.service';
 import { TranslateService } from '@ngx-translate/core';
-import { finalize, map, Observable, take } from 'rxjs';
+import { combineLatest, finalize, map, Observable, of, take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -29,8 +29,9 @@ export class RoomsComponent implements OnInit {
   totalPages: number;
   pageSize: number = 10; // Number of rows per page
   isLoading: boolean = false;
-
   roomTableData: TableData = { headers: [], rows: [] }; // Initialize properly
+  noDataToDisplay: boolean = false;
+  allRooms: any[] = [];
 
   constructor(
     private roomService: RoomService,
@@ -49,10 +50,18 @@ export class RoomsComponent implements OnInit {
   ngOnInit(): void {
     this.getRoomData();
 
+    // Listen for changes to search query and sort order
+    this.storeService.sortAscending$.subscribe(() => {
+      this.filterRoomsOnSearch(); // Trigger search filtering and sorting
+    });
+
     // 🧠 Listen for refresh trigger
     this.storeService.onRoomRefresh().subscribe(() => {
       this.getRoomData(); // Refresh data when a new room is added
     });
+
+    this.loadInitialRooms();
+    this.handleSearchQuery(); // handle search filtering reactively
   }
 
   // Handle page change (without storing in the service)
@@ -63,24 +72,30 @@ export class RoomsComponent implements OnInit {
 
   getRoomData() {
     this.isLoading = true;
-    this.rooms$ = this.roomService.getAllRoom().pipe(
-      take(1),
-      map((rooms: Room[]) => {
-        const paginatedRooms = this.getPaginatedRooms(rooms);
-        const transformedRooms = this.transformRooms(paginatedRooms);
-        return this.formatData(transformedRooms);
-      }),
-      finalize(() => {
+
+    this.rooms$ = combineLatest([
+      this.roomService.getAllRoom().pipe(take(1)),
+      this.storeService.searchQuery$,
+    ]).pipe(
+      map(([rooms, query]) => {
+        const transformedRooms = this.transformRooms(rooms); // transform first
+        const filteredRooms = this.filterRooms(transformedRooms, query); // filter full dataset
+
+        this.totalPages = Math.ceil(filteredRooms.length / this.pageSize);
+        this.currentPage = Math.min(this.currentPage, this.totalPages || 1); // prevent overflow
+
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const paginatedRooms = filteredRooms.slice(
+          startIndex,
+          startIndex + this.pageSize
+        );
+
+        this.noDataToDisplay = paginatedRooms.length === 0;
         this.isLoading = false;
+
+        return this.formatData(paginatedRooms);
       })
     );
-  }
-
-  private getPaginatedRooms(rooms: Room[]) {
-    const totalRooms = rooms.length;
-    this.totalPages = Math.ceil(totalRooms / this.pageSize);
-    const startIndex = (this.currentPage - 1) * this.pageSize;
-    return rooms.slice(startIndex, startIndex + this.pageSize);
   }
 
   private transformRooms(paginatedRooms: Room[]) {
@@ -105,24 +120,121 @@ export class RoomsComponent implements OnInit {
 
   onDeleteRow(row: any) {
     this.isLoading = true;
+    this.roomService
+      .getAllRoom()
+      .pipe(take(1))
+      .subscribe({
+        next: (rooms: Room[]) => {
+          const totalItems = rooms.length - 1; // subtract 1 to simulate deletion
+          const totalPagesAfterDelete = Math.ceil(totalItems / this.pageSize);
 
-    this.roomService.getAllRoom().pipe(take(1)).subscribe((rooms: Room[]) => {
-      const totalItems = rooms.length - 1; // subtract 1 to simulate deletion
-      const totalPagesAfterDelete = Math.ceil(totalItems / this.pageSize);
-      
-      if (this.currentPage > totalPagesAfterDelete) {
-        this.currentPage = Math.max(totalPagesAfterDelete, 1); // go back a page if needed
-      }
-  
-      this.roomService.deleteRoom(row._id).pipe(
-        finalize(() => {
-          this.getRoomData(); // refresh updated data
-        })
-      ).subscribe(() => {
-       this.toastr.success('Room deleted successfully!', 'Success')
+          if (this.currentPage > totalPagesAfterDelete) {
+            this.currentPage = Math.max(totalPagesAfterDelete, 1); // go back a page if needed
+          }
+
+          this.roomService
+            .deleteRoom(row._id)
+            .pipe(
+              finalize(() => {
+                this.getRoomData(); // refresh updated data
+              })
+            )
+            .subscribe({
+              next: () => {
+                this.toastr.success('Room deleted successfully!', 'Success');
+              },
+              error: (err) => {
+                console.error(err);
+                // Display error message using toastr
+                this.toastr.error(
+                  'Failed to delete room. Please try again later.',
+                  'Error'
+                );
+              },
+            });
+        },
+        error: (err) => {
+          console.error(err);
+          // Handle error from getAllRoom request
+          this.toastr.error(
+            'Failed to fetch room data. Please try again later.',
+            'Error'
+          );
+        },
       });
+  }
+
+  private filterRooms(rooms: any[], query: string): any[] {
+    return rooms.filter((room) =>
+      Object.values(room).some((value) =>
+        String(value).toLowerCase().includes(query)
+      )
+    );
+  }
+
+  loadInitialRooms() {
+    this.isLoading = true;
+    this.roomService
+      .getAllRoom()
+      .pipe(take(1))
+      .subscribe((rooms) => {
+        this.allRooms = this.transformRooms(rooms); // full dataset transformed
+        this.isLoading = false;
+        this.filterRoomsOnSearch(); // then filtered & paginated
+      });
+  }
+
+  handleSearchQuery() {
+    combineLatest([
+      this.storeService.searchQuery$,
+      this.storeService.sortAscending$,
+    ]).subscribe(() => {
+      this.filterRoomsOnSearch();
     });
   }
-  
-  
+
+  filterRoomsOnSearch() {
+    const query = this.storeService.searchQuerySubject.getValue();
+    const isAscending = this.storeService.sortAscendingSubject.getValue();
+
+    let filtered = this.filterRooms(this.allRooms, query);
+    filtered = this.sortRoomsByName(filtered, isAscending);
+
+    this.totalPages = Math.ceil(filtered.length / this.pageSize);
+    this.currentPage = Math.min(this.currentPage, this.totalPages || 1);
+
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const paginated = filtered.slice(startIndex, startIndex + this.pageSize);
+
+    this.noDataToDisplay = paginated.length === 0;
+
+    const formatted = this.formatData(paginated);
+    this.rooms$ = of(formatted); // this component's display
+    this.storeService.setRooms(formatted.rows); // 🔥 store the data globally
+  }
+
+  //Sort by Room Number
+  private sortRoomsByName(rooms: any[], isAscending: boolean | null): any[] {
+    if (isAscending === null) return rooms; // Don't sort if null
+    
+    return rooms.sort((a, b) => {
+      const nameA = a['Room Number'].toLowerCase();
+      const nameB = b['Room Number'].toLowerCase();
+      return isAscending
+        ? nameA.localeCompare(nameB)
+        : nameB.localeCompare(nameA);
+    });
+  }
+
+  onSortClickAscending() {
+    this.storeService.setSortOrder(true); // Explicitly set to ascending
+  }
+
+  onSortClickDescending() {
+    this.storeService.setSortOrder(false); // Explicitly set to descending
+  }
+
+  onResetFilter() {
+    this.storeService.setSortOrder(null); // Reset sorting
+  }
 }

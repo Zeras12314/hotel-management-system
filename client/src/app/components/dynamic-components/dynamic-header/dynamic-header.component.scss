@@ -1,32 +1,41 @@
 .header {
+  .header-btn {
+    &-left {
+      display: flex;
 
-  
-    .header-btn {
-     
-      &-left {
+      &-icons {
         display: flex;
-        
-        &-icons {
-          display: flex;
-  
-          .btn-icon {
-            background-color: #e9ecef !important;
-            font-size: 20px;
-            padding: 4px 10px;
-            margin-left: 5px;
-            min-height: 100%;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: background-color 0.1s ease;
-  
-            &:hover {
-              background-color: #0B6B62 !important;
-              color: #ffffff !important;
-            }
+
+        .btn-icon {
+          background-color: #e9ecef !important;
+          font-size: 20px;
+          padding: 4px 10px;
+          margin-left: 5px;
+          min-height: 100%;
+          cursor: pointer;
+          border-radius: 6px;
+          transition: background-color 0.1s ease;
+
+          &:not(.reset-filter):hover {
+            background-color: #0b6b62 !important;
+            color: #ffffff !important;
+          }
+        }
+        .active {
+          background-color: #0b6b62 !important;
+          color: #ffffff !important;
+        }
+
+        .reset-filter {
+          // background-color: red !important;
+          color: red !important;
+
+          &:hover {
+            background-color: red !important;
+            color: #ffffff !important;
           }
         }
       }
     }
-
   }
-  
+}
