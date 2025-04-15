@@ -10,18 +10,21 @@
           type="search"
           placeholder="Search"
           aria-label="Search"
+          (input)="onSearch($event)"
         />
       </form>
 
       <div class="header-btn-left-icons">
-        <div class="btn-icon text-primary">
-          <i class="bi bi-funnel"></i>
-        </div>
-        <div class="btn-icon text-primary">
+        <div class="btn-icon text-primary" [ngClass]="{ 'active' : isAscending === true  }" (click)="onSortClickAscending()">
           <i class="bi bi-sort-alpha-down"></i>
         </div>
-        <div class="btn-icon text-primary">
+        <div class="btn-icon text-primary"   [ngClass]="{ 'active': isAscending === false }" 
+        (click)="onSortClickDescending()">
           <i class="bi bi-sort-alpha-up"></i>
+        </div>
+        <div class="btn-icon text-primary reset-filter" title="reset filter" *ngIf="isAscending !== null"
+        (click)="onResetFilter()">
+          <i class="bi bi-x-circle"></i>
         </div>
       </div>
     </div>

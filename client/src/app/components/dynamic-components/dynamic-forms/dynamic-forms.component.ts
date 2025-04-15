@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownConstants } from 'src/app/utils/dropdown.constants';
 import { RoomService } from 'src/app/services/room/room.service';
 import { StoreService } from 'src/app/services/store/store.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dynamic-forms',
@@ -22,7 +23,8 @@ export class DynamicFormsComponent implements OnInit {
     private modalService: ModalService,
     private fb: FormBuilder,
     private roomService: RoomService,
-    private storeService: StoreService
+    private storeService: StoreService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -44,14 +46,20 @@ export class DynamicFormsComponent implements OnInit {
 
   addData() {
     const newRoom = this.addDataForm.value;
-    this.roomService.addRoom(newRoom).subscribe((res) => {
-      console.log(res);
-       // Close the modal via the ModalService
-      this.modalService.closeDialog('exampleModal');
-
-      // Tell the app: "Room data changed, refresh it!"
-      this.storeService.triggerRoomRefresh();
+    this.roomService.addRoom(newRoom).subscribe({
+      next: (res) => {
+        console.log(res);
+        // Close the modal via the ModalService
+        this.modalService.closeDialog('exampleModal');
+        // Tell the app: "Room data changed, refresh it!"
+        this.storeService.triggerRoomRefresh();
+        this.toastr.success('Room Added!', 'Success');
+      },
+      error: (err) => {
+        const errorMessage = err.error.message;
+        // Show an error toast
+        this.toastr.error(errorMessage);
+      },
     });
   }
-  
 }
