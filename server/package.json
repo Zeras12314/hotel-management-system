@@ -4,7 +4,8 @@
     "cors": "^2.8.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
-    "mongoose": "^8.4.3"
+    "mongoose": "^8.4.3",
+    "mongoose-type-email": "^1.1.2"
   },
   "scripts": {
     "dev-start": "nodemon src/index.js"
