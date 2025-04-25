@@ -23,6 +23,7 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 import { PopUpModalComponent } from './components/dynamic-components/pop-up-modal/pop-up-modal.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { GuestsComponent } from './components/guests/guests.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     PaginationComponent,
     LoadingSpinnerComponent,
     PopUpModalComponent,
+    GuestsComponent,
   ],
   imports: [
     BrowserModule,

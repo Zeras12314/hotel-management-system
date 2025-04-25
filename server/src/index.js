@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const roomRoute = require("../routes/roomRoute");
 const userRoute = require("../routes/userRoute");
+const guestRoute = require("../routes/guestRoute");
 const mongoose = require("mongoose");
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/room", roomRoute);
 app.use("/api/user", userRoute);
+app.use("/api/guest", guestRoute);
 
 app.get("/login", (req, res) => {
   res.json("login");

@@ -38,7 +38,7 @@ const createRoom = async(req, res) => {
     res.status(200).json(room);
   } catch (error) {
     res.status(500);
-    throw new Eror(error.message)
+    throw new Error(error.message)
   }
 }
 
