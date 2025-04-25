@@ -6,7 +6,7 @@
   </div>
 
   <div class="dynamic-table w-auto">
-    <ng-container *ngIf="!noDataToDisplay; else noData">
+    <ng-container *ngIf="!noDataToDisplay && !isLoading; else noData">
       <app-dynamic-table
         [dynamicTableData]="rooms$ | async"
         (deleteRow)="onDeleteRow($event)"

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+
 import { ModalService } from 'src/app/services/modal.service';
 import { StoreService } from 'src/app/services/store/store.service';
+import { TranslationService } from 'src/app/services/translation.service';
 
 @Component({
   selector: 'app-dynamic-header',
@@ -12,24 +13,17 @@ export class DynamicHeaderComponent implements OnInit {
   isAscending: boolean | null = null; // Default is 'null', meaning no selection
 
   constructor(
-    private translate: TranslateService,
     private modalService: ModalService,
-    private storeService: StoreService
-  ) {
-    this.translate.addLangs(['en', 'es']); // Define available languages
-  }
+    private storeService: StoreService,
+    private translationService: TranslationService
+  ) {}
   ngOnInit(): void {
     // Force 'en' as the active language
-    this.setLanguage('en');
+
     // Listen to changes in sort order from the store
     this.storeService.sortAscending$.subscribe((ascending) => {
       this.isAscending = ascending; // Update isAscending based on the store's value
     });
-    console.log('isAscending', this.isAscending)
-  }
-
-  setLanguage(lang: string) {
-    this.translate.use(lang);
   }
 
   // Method to trigger modal open
@@ -53,12 +47,12 @@ export class DynamicHeaderComponent implements OnInit {
     this.isAscending = true;
     this.storeService.setSortOrder(true);
   }
-  
+
   onSortClickDescending() {
     this.isAscending = false;
     this.storeService.setSortOrder(false);
   }
-  
+
   onResetFilter() {
     this.isAscending = null;
     this.storeService.setSortOrder(null);

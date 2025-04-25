@@ -29,9 +29,6 @@ export class AppComponent implements OnInit {
           this.showNavbar = true;
           this.showSidebar = true;
         }
-        // Update showNavbar and showSidebar based on current route
-        // this.showNavbar = !this.currentRoute.includes('login') || !this.currentRoute.includes('not-found');
-        // this.showSidebar = !this.currentRoute.includes('login')|| !this.currentRoute.includes('not-found');
       });
   }
 
