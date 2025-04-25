@@ -58,6 +58,7 @@ export class RoomsComponent implements OnInit {
     // 🧠 Listen for refresh trigger
     this.storeService.onRoomRefresh().subscribe(() => {
       this.getRoomData(); // Refresh data when a new room is added
+      this.isLoading = false
     });
 
     this.loadInitialRooms();
@@ -137,6 +138,7 @@ export class RoomsComponent implements OnInit {
             .pipe(
               finalize(() => {
                 this.getRoomData(); // refresh updated data
+                this.isLoading = false;
               })
             )
             .subscribe({

@@ -3,6 +3,7 @@ import { TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { TRANSLATION_FILES } from 'src/assets/translations/translate-file-list';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class CustomTranslateLoaderService implements TranslateLoader {
 
   getTranslation(lang: string): Observable<any> {
     // List of JSON files to load dynamically (add more as needed)
-    const files = ['room', 'dashboard', 'common']; // Add more files as necessary
+    const files = TRANSLATION_FILES; // Add more files as necessary
     console.log(`Loading translations for ${lang}:`, files); // Log the list of files being requested
 
     // Create an array of HTTP requests for each file
