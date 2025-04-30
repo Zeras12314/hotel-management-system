@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { ModalService } from 'src/app/services/modal.service';
 import { StoreService } from 'src/app/services/store/store.service';
@@ -11,15 +12,16 @@ import { TranslationService } from 'src/app/services/translation.service';
 })
 export class DynamicHeaderComponent implements OnInit {
   isAscending: boolean | null = null; // Default is 'null', meaning no selection
+  activePage: string = '';
 
   constructor(
     private modalService: ModalService,
     private storeService: StoreService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private router: Router
   ) {}
   ngOnInit(): void {
-    // Force 'en' as the active language
-
+    this.getTitleTranslation();
     // Listen to changes in sort order from the store
     this.storeService.sortAscending$.subscribe((ascending) => {
       this.isAscending = ascending; // Update isAscending based on the store's value
@@ -38,11 +40,6 @@ export class DynamicHeaderComponent implements OnInit {
     this.storeService.setSearchQuery(searchTerm);
   }
 
-  // onSortClickAscending(){
-  //   this.storeService.toggleSortOrder();
-  //   this.isActive = !this.isActive;
-  // }
-
   onSortClickAscending() {
     this.isAscending = true;
     this.storeService.setSortOrder(true);
@@ -56,5 +53,16 @@ export class DynamicHeaderComponent implements OnInit {
   onResetFilter() {
     this.isAscending = null;
     this.storeService.setSortOrder(null);
+  }
+
+  getTitleTranslation() {
+    switch (this.router.url) {
+      case '/rooms':
+        this.activePage = 'Room';
+        break;
+      case '/guests':
+        this.activePage = 'Guest';
+        break;
+    }
   }
 }

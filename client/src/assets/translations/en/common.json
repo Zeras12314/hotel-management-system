@@ -1,7 +1,12 @@
 {
-    "pagination": {
-      "next": "Next",
-      "previous": "Previous"
-    }
+  "common" : {
+    "nodata":"No data to display"
+  },
+  "pagination": {
+    "next": "Next",
+    "previous": "Previous"
+  },
+  "button": {
+    "add": "Add {{ currentPage }}"
   }
-  
+}
