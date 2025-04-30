@@ -4,7 +4,6 @@ import { Room, TableData } from 'src/app/models/room';
 import { FunctionService } from 'src/app/services/functions/function.service';
 import { FunctionServiceFactory } from 'src/app/services/functions/function.service-factory';
 import { StoreService } from 'src/app/services/store/store.service';
-import { TranslateService } from '@ngx-translate/core';
 import { combineLatest, finalize, map, Observable, of, take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
