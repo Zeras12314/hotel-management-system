@@ -2,4 +2,16 @@
     <div class="w-auto">
         <app-dynamic-header class="w-auto"></app-dynamic-header>
       </div>
+
+      <div class="dynamic-table w-auto">
+        <ng-container *ngIf="!noDataToDisplay && !isLoading; else noData">
+          <app-dynamic-table
+            [dynamicTableData]="guests$ | async"
+          ></app-dynamic-table>
+        </ng-container>
+        <ng-template #noData>
+          <h3 class="text-center py-5">{{'common.nodata' | translate}}</h3>
+        </ng-template>
+      </div>
 </section>
+

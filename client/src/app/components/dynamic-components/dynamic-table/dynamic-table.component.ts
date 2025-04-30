@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FunctionService } from '../../../services/functions/function.service';
 import { FunctionServiceFactory } from '../../../services/functions/function.service-factory';
 import { FunctionServiceRoom } from '../../../services/functions/function-services/function.service-room';
-import { TableData } from '../../../models/room';
+import { TableData } from '../../../models/header.model';
 import { ModalService } from 'src/app/services/modal.service';
 
 @Component({

@@ -7,21 +7,16 @@
 
   <div class="dynamic-table w-auto">
     <ng-container *ngIf="!noDataToDisplay && !isLoading; else noData">
-      <app-dynamic-table
-        [dynamicTableData]="rooms$ | async"
-        (deleteRow)="onDeleteRow($event)"
-      ></app-dynamic-table>
+      <app-dynamic-table [dynamicTableData]="rooms$ | async" (deleteRow)="onDeleteRow($event)"></app-dynamic-table>
     </ng-container>
     <ng-template #noData>
-      <h3 class="text-center py-5">{{'common.nodata' | translate}}</h3>
+      <ng-container *ngIf="!isLoading">
+        <h3 class="text-center py-5">{{'common.nodata' | translate}}</h3>
+      </ng-container>
     </ng-template>
   </div>
   <div>
-    <app-pagination
-    *ngIf="!isLoading && !noDataToDisplay"
-      [currentPage]="currentPage"
-      [totalPages]="totalPages"
-      (pageChanged)="onPageChange($event)"
-    ></app-pagination>
+    <app-pagination *ngIf="!isLoading && !noDataToDisplay" [currentPage]="currentPage" [totalPages]="totalPages"
+      (pageChanged)="onPageChange($event)"></app-pagination>
   </div>
 </section>

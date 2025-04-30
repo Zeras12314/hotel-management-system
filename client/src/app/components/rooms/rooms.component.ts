@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { RoomService } from 'src/app/services/room/room.service';
-import { Room, TableData } from 'src/app/models/room';
 import { FunctionService } from 'src/app/services/functions/function.service';
 import { FunctionServiceFactory } from 'src/app/services/functions/function.service-factory';
 import { StoreService } from 'src/app/services/store/store.service';
-import { TranslateService } from '@ngx-translate/core';
 import { combineLatest, finalize, map, Observable, of, take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { Room, TableData } from 'src/app/models/header.model';
 
 @Component({
   selector: 'app-rooms',
@@ -29,7 +28,6 @@ export class RoomsComponent implements OnInit {
   totalPages: number;
   pageSize: number = 10; // Number of rows per page
   isLoading: boolean = false;
-  roomTableData: TableData = { headers: [], rows: [] }; // Initialize properly
   noDataToDisplay: boolean = false;
   allRooms: any[] = [];
 
