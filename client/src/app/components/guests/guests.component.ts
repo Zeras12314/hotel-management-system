@@ -110,7 +110,8 @@ export class GuestsComponent implements OnInit {
     }
   
     filterDataOnSearch() {
-      const query = this.storeService.searchQuerySubject.getValue();
+      
+      const query = this.storeService?.searchQuerySubject?.getValue();
       const isAscending = this.storeService.sortAscendingSubject.getValue();
   
       let filtered = this.filterData(this.allData, query);
@@ -123,10 +124,10 @@ export class GuestsComponent implements OnInit {
       const paginated = filtered.slice(startIndex, startIndex + this.pageSize);
   
       this.noDataToDisplay = paginated.length === 0;
-  
+      
       const formatted = this.formatData(paginated);
       this.guests$ = of(formatted); // this component's display
-      this.storeService.setRooms(formatted.rows); // 🔥 store the data globally
+      this.storeService.setRooms(formatted?.rows); // 🔥 store the data globally
     }
     
     private sortRoomsByName(rooms: any[], isAscending: boolean | null): any[] {

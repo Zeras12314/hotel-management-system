@@ -3,7 +3,15 @@ import { RoomService } from 'src/app/services/room/room.service';
 import { FunctionService } from 'src/app/services/functions/function.service';
 import { FunctionServiceFactory } from 'src/app/services/functions/function.service-factory';
 import { StoreService } from 'src/app/services/store/store.service';
-import { combineLatest, finalize, map, Observable, of, take } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  finalize,
+  map,
+  Observable,
+  of,
+  take,
+} from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Room, TableData } from 'src/app/models/header.model';
 
@@ -15,7 +23,8 @@ import { Room, TableData } from 'src/app/models/header.model';
 export class RoomsComponent implements OnInit {
   functionService: FunctionService;
   currentPageUrl;
-  rooms$: Observable<TableData>; // Use Observable for async pipe
+  private roomsSubject = new BehaviorSubject<TableData>(null);
+  rooms$ = this.roomsSubject.asObservable();
   transformedRooms: {
     'Room Number': string;
     Category: string;
@@ -24,7 +33,7 @@ export class RoomsComponent implements OnInit {
     'Room Status': string;
   }[] = [];
   // for pagination
-  currentPage: number;
+  currentPage: number = 1;
   totalPages: number;
   pageSize: number = 10; // Number of rows per page
   isLoading: boolean = false;
@@ -56,7 +65,7 @@ export class RoomsComponent implements OnInit {
     // 🧠 Listen for refresh trigger
     this.storeService.onRoomRefresh().subscribe(() => {
       this.getRoomData(); // Refresh data when a new room is added
-      this.isLoading = false
+      this.isLoading = false;
     });
 
     this.loadInitialRooms();
@@ -72,29 +81,33 @@ export class RoomsComponent implements OnInit {
   getRoomData() {
     this.isLoading = true;
 
-    this.rooms$ = combineLatest([
+    combineLatest([
       this.roomService.getAllRoom().pipe(take(1)),
       this.storeService.searchQuery$,
-    ]).pipe(
-      map(([rooms, query]) => {
-        const transformedRooms = this.transformRooms(rooms); // transform first
-        const filteredRooms = this.filterRooms(transformedRooms, query); // filter full dataset
+    ])
+      .pipe(
+        map(([rooms, query]) => {
+          const transformedRooms = this.transformRooms(rooms);
+          const filteredRooms = this.filterRooms(transformedRooms, query);
 
-        this.totalPages = Math.ceil(filteredRooms.length / this.pageSize);
-        this.currentPage = Math.min(this.currentPage, this.totalPages || 1); // prevent overflow
+          this.totalPages = Math.ceil(filteredRooms.length / this.pageSize);
+          this.currentPage = Math.min(this.currentPage, this.totalPages || 1);
 
-        const startIndex = (this.currentPage - 1) * this.pageSize;
-        const paginatedRooms = filteredRooms.slice(
-          startIndex,
-          startIndex + this.pageSize
-        );
+          const startIndex = (this.currentPage - 1) * this.pageSize;
+          const paginatedRooms = filteredRooms.slice(
+            startIndex,
+            startIndex + this.pageSize
+          );
 
-        this.noDataToDisplay = paginatedRooms.length === 0;
-        this.isLoading = false;
+          this.noDataToDisplay = paginatedRooms.length === 0;
+          this.isLoading = false;
 
-        return this.formatData(paginatedRooms);
-      })
-    );
+          return this.formatData(paginatedRooms);
+        })
+      )
+      .subscribe((formattedData) => {
+        this.roomsSubject.next(formattedData); // ✅ Update the observable
+      });
   }
 
   private transformRooms(paginatedRooms: Room[]) {
@@ -119,51 +132,56 @@ export class RoomsComponent implements OnInit {
 
   onDeleteRow(row: any) {
     this.isLoading = true;
-    this.roomService
-      .getAllRoom()
-      .pipe(take(1))
-      .subscribe({
-        next: (rooms: Room[]) => {
-          const totalItems = rooms.length - 1; // subtract 1 to simulate deletion
-          const totalPagesAfterDelete = Math.ceil(totalItems / this.pageSize);
-
-          if (this.currentPage > totalPagesAfterDelete) {
-            this.currentPage = Math.max(totalPagesAfterDelete, 1); // go back a page if needed
+  
+    this.roomService.deleteRoom(row._id).pipe(
+      finalize(() => {
+        // After deletion, re-fetch all rooms and recalculate pagination
+        this.roomService.getAllRoom().pipe(take(1)).subscribe({
+          next: (rooms: Room[]) => {
+            const transformed = this.transformRooms(rooms);
+            this.allRooms = transformed;
+  
+            // Recalculate pagination
+            const query = this.storeService.searchQuerySubject.getValue();
+            const isAscending = this.storeService.sortAscendingSubject.getValue();
+  
+            let filtered = this.filterRooms(this.allRooms, query);
+            filtered = this.sortRoomsByName(filtered, isAscending);
+  
+            this.totalPages = Math.ceil(filtered.length / this.pageSize);
+  
+            // Adjust current page if needed
+            if (this.currentPage > this.totalPages) {
+              this.currentPage = Math.max(this.totalPages, 1);
+            }
+  
+            const startIndex = (this.currentPage - 1) * this.pageSize;
+            const paginated = filtered.slice(startIndex, startIndex + this.pageSize);
+  
+            this.noDataToDisplay = paginated.length === 0;
+  
+            const formatted = this.formatData(paginated);
+            this.roomsSubject.next(formatted); // ✅ update observable
+            this.storeService.setRooms(formatted.rows); // 🔥 update shared state
+  
+            this.isLoading = false;
+          },
+          error: () => {
+            this.toastr.error('Failed to fetch room data.', 'Error');
+            this.isLoading = false;
           }
-
-          this.roomService
-            .deleteRoom(row._id)
-            .pipe(
-              finalize(() => {
-                this.getRoomData(); // refresh updated data
-                this.isLoading = false;
-              })
-            )
-            .subscribe({
-              next: () => {
-                this.toastr.success('Room deleted successfully!', 'Success');
-              },
-              error: (err) => {
-                console.error(err);
-                // Display error message using toastr
-                this.toastr.error(
-                  'Failed to delete room. Please try again later.',
-                  'Error'
-                );
-              },
-            });
-        },
-        error: (err) => {
-          console.error(err);
-          // Handle error from getAllRoom request
-          this.toastr.error(
-            'Failed to fetch room data. Please try again later.',
-            'Error'
-          );
-        },
-      });
+        });
+      })
+    ).subscribe({
+      next: () => {
+        this.toastr.success('Room deleted successfully!', 'Success');
+      },
+      error: () => {
+        this.toastr.error('Failed to delete room.', 'Error');
+      }
+    });
   }
-
+  
   private filterRooms(rooms: any[], query: string): any[] {
     return rooms.filter((room) =>
       Object.values(room).some((value) =>
@@ -209,14 +227,14 @@ export class RoomsComponent implements OnInit {
     this.noDataToDisplay = paginated.length === 0;
 
     const formatted = this.formatData(paginated);
-    this.rooms$ = of(formatted); // this component's display
+    this.roomsSubject.next(formatted) // this component's display
     this.storeService.setRooms(formatted.rows); // 🔥 store the data globally
   }
 
   //Sort by Room Number
   private sortRoomsByName(rooms: any[], isAscending: boolean | null): any[] {
     if (isAscending === null) return rooms; // Don't sort if null
-    
+
     return rooms.sort((a, b) => {
       const nameA = a['Room Number'].toLowerCase();
       const nameB = b['Room Number'].toLowerCase();
