@@ -54,6 +54,7 @@ export class DynamicFormsComponent implements OnInit {
         // Tell the app: "Room data changed, refresh it!"
         this.storeService.triggerRoomRefresh();
         this.toastr.success('Room Added!', 'Success');
+        this.addDataForm.reset();
       },
       error: (err) => {
         const errorMessage = err.error.message;
