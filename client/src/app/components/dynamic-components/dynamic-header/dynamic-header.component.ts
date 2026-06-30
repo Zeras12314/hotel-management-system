@@ -31,7 +31,7 @@ export class DynamicHeaderComponent implements OnInit {
   // Method to trigger modal open
   openModal() {
     // Just call openDialog - service handles registration
-    this.modalService.openDialog('exampleModal', { data: 'example' });
+    this.modalService.openDialog('dynamicForm', { data: 'form' });
   }
 
   onSearch(event: Event) {

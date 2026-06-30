@@ -50,7 +50,7 @@ export class DynamicFormsComponent implements OnInit {
       next: (res) => {
         console.log(res);
         // Close the modal via the ModalService
-        this.modalService.closeDialog('exampleModal');
+        this.modalService.closeDialog('dynamicForm');
         // Tell the app: "Room data changed, refresh it!"
         this.storeService.triggerRoomRefresh();
         this.toastr.success('Room Added!', 'Success');

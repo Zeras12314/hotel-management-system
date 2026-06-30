@@ -21,8 +21,7 @@ export class GuestsComponent implements OnInit {
   constructor(
     private guestService: GuestService,
     private storeService: StoreService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getAllGuests();
@@ -35,7 +34,7 @@ export class GuestsComponent implements OnInit {
 
     this.guests$ = combineLatest([
       this.guestService.getAllGuest().pipe(take(1)),
-      this.storeService.searchQuery$
+      this.storeService.searchQuery$,
     ]).pipe(
       map(([guests, query]) => {
         const transformedData = this.transformData(guests); // transform first
@@ -61,9 +60,12 @@ export class GuestsComponent implements OnInit {
   private transformData(paginatedData: Guest[]) {
     return paginatedData.map((guest) => ({
       _id: guest._id,
-      'First Name': guest.firstName,
-      'Last Name': guest.lastName,
-      DOB: guest.dob,
+      'Full Name': `${guest.firstName} ${guest.lastName}`,
+      DOB: new Date(guest.dob).toLocaleString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      }),
       Address: guest.address,
       Phone: guest.phone,
       Email: guest.email,
@@ -73,12 +75,11 @@ export class GuestsComponent implements OnInit {
   private formatData(transformedData: any[]) {
     return {
       headers: Array.isArray(Object.keys(transformedData[0]))
-      ? Object.keys(transformedData[0]).filter((key) => key !== '_id')
-      : [],
+        ? Object.keys(transformedData[0]).filter((key) => key !== '_id')
+        : [],
       rows: transformedData,
     };
   }
-  
 
   private filterData(guest: any[], query: string): any[] {
     return guest.filter((guest) =>
@@ -88,57 +89,56 @@ export class GuestsComponent implements OnInit {
     );
   }
 
-    loadInitialData() {
-      this.isLoading = true;
-      this.guestService
-        .getAllGuest()
-        .pipe(take(1))
-        .subscribe((guests) => {
-          this.allData = this.transformData(guests); // full dataset transformed
-          this.isLoading = false;
-          this.filterDataOnSearch(); // then filtered & paginated
-        });
-    }
-  
-    handleSearchQuery() {
-      combineLatest([
-        this.storeService.searchQuery$,
-        this.storeService.sortAscending$,
-      ]).subscribe(() => {
-        this.filterDataOnSearch();
+  loadInitialData() {
+    this.isLoading = true;
+    this.guestService
+      .getAllGuest()
+      .pipe(take(1))
+      .subscribe((guests) => {
+        this.allData = this.transformData(guests); // full dataset transformed
+        this.isLoading = false;
+        this.filterDataOnSearch(); // then filtered & paginated
       });
-    }
-  
-    filterDataOnSearch() {
-      
-      const query = this.storeService?.searchQuerySubject?.getValue();
-      const isAscending = this.storeService.sortAscendingSubject.getValue();
-  
-      let filtered = this.filterData(this.allData, query);
-      filtered = this.sortRoomsByName(filtered, isAscending);
-  
-      this.totalPages = Math.ceil(filtered.length / this.pageSize);
-      this.currentPage = Math.min(this.currentPage, this.totalPages || 1);
-  
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      const paginated = filtered.slice(startIndex, startIndex + this.pageSize);
-  
-      this.noDataToDisplay = paginated.length === 0;
-      
-      const formatted = this.formatData(paginated);
-      this.guests$ = of(formatted); // this component's display
-      this.storeService.setRooms(formatted?.rows); // 🔥 store the data globally
-    }
-    
-    private sortRoomsByName(rooms: any[], isAscending: boolean | null): any[] {
-      if (isAscending === null) return rooms; // Don't sort if null
-      
-      return rooms.sort((a, b) => {
-        const nameA = a['Room Number'].toLowerCase();
-        const nameB = b['Room Number'].toLowerCase();
-        return isAscending
-          ? nameA.localeCompare(nameB)
-          : nameB.localeCompare(nameA);
-      });
-    }
+  }
+
+  handleSearchQuery() {
+    combineLatest([
+      this.storeService.searchQuery$,
+      this.storeService.sortAscending$,
+    ]).subscribe(() => {
+      this.filterDataOnSearch();
+    });
+  }
+
+  filterDataOnSearch() {
+    const query = this.storeService?.searchQuerySubject?.getValue();
+    const isAscending = this.storeService.sortAscendingSubject.getValue();
+
+    let filtered = this.filterData(this.allData, query);
+    filtered = this.sortRoomsByName(filtered, isAscending);
+
+    this.totalPages = Math.ceil(filtered.length / this.pageSize);
+    this.currentPage = Math.min(this.currentPage, this.totalPages || 1);
+
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const paginated = filtered.slice(startIndex, startIndex + this.pageSize);
+
+    this.noDataToDisplay = paginated.length === 0;
+
+    const formatted = this.formatData(paginated);
+    this.guests$ = of(formatted); // this component's display
+    this.storeService.setRooms(formatted?.rows); // 🔥 store the data globally
+  }
+
+  private sortRoomsByName(rooms: any[], isAscending: boolean | null): any[] {
+    if (isAscending === null) return rooms; // Don't sort if null
+
+    return rooms.sort((a, b) => {
+      const nameA = a['Room Number'].toLowerCase();
+      const nameB = b['Room Number'].toLowerCase();
+      return isAscending
+        ? nameA.localeCompare(nameB)
+        : nameB.localeCompare(nameA);
+    });
+  }
 }

@@ -59,4 +59,9 @@ export class DynamicTableComponent implements OnInit {
   onConfirmDelete(row: any) {
     this.deleteRow.emit(row)
   }
+
+  openModal() {
+    // Just call openDialog - service handles registration
+    this.modalService.openDialog('dynamicForm', { data: 'form' });
+  }
 }
