@@ -19,10 +19,14 @@ app.get("/login", (req, res) => {
   res.json("login");
 });
 
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => console.log("MongoDB Successfully Connected"))
-  .catch((error) => console.log(error.message));
+if (!process.env.MONGODB_URI) {
+  console.error("MONGODB_URI environment variable is not set");
+} else {
+  mongoose
+    .connect(process.env.MONGODB_URI)
+    .then(() => console.log("MongoDB Successfully Connected"))
+    .catch((error) => console.error("MongoDB connection error:", error.message));
+}
 
 module.exports = app;
 
