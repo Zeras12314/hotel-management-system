@@ -8,6 +8,7 @@
     "mongoose-type-email": "^1.1.2"
   },
   "scripts": {
+    "start": "node src/index.js",
     "dev-start": "nodemon src/index.js"
   }
 }
