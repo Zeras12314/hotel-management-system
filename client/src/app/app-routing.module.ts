@@ -6,16 +6,20 @@ import { LoginComponent } from './login/login.component';
 import { RoomsComponent } from './components/rooms/rooms.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { GuestsComponent } from './components/guests/guests.component';
+import { UnderDevelopmentComponent } from './components/under-development/under-development.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' }, // Default to '/home'
-  {path: 'home', component: HomeComponent},
-  {path: 'signup', component: SignupComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'rooms', component: RoomsComponent},
-  {path: 'guests', component: GuestsComponent},
-  {path: 'not-found', component: NotFoundComponent},
-  {path: '**', redirectTo: '/not-found'},
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'rooms', component: RoomsComponent },
+  { path: 'guests', component: GuestsComponent },
+  { path: 'room-timeline', component: UnderDevelopmentComponent },
+  { path: 'personnel', component: UnderDevelopmentComponent },
+  { path: 'history', component: UnderDevelopmentComponent },
+  { path: 'not-found', component: NotFoundComponent },
+  { path: '**', redirectTo: '/not-found' },
 ];
 
 @NgModule({

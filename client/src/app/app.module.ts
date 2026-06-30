@@ -24,6 +24,7 @@ import { PopUpModalComponent } from './components/dynamic-components/pop-up-moda
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GuestsComponent } from './components/guests/guests.component';
+import { UnderDevelopmentComponent } from './components/under-development/under-development.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { GuestsComponent } from './components/guests/guests.component';
     LoadingSpinnerComponent,
     PopUpModalComponent,
     GuestsComponent,
+    UnderDevelopmentComponent,
   ],
   imports: [
     BrowserModule,
